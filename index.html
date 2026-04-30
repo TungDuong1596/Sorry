@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gửi Lê Hoàng</title>
+    <style>
+        body {
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            background-color: #fffafa;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            overflow: hidden;
+            text-align: center;
+        }
+        .container {
+            padding: 20px;
+            max-width: 600px;
+            width: 100%;
+        }
+        h1 { 
+            color: #ff6b6b; 
+            margin-bottom: 30px; 
+            text-shadow: 1px 1px 2px #ffe0e0;
+            line-height: 1.5;
+            font-size: 28px;
+        }
+        .buttons { 
+            position: relative; 
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            height: 60px; 
+            align-items: center;
+        }
+        button {
+            padding: 12px 30px;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            border-radius: 50px;
+            border: none;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(255, 107, 107, 0.2);
+        }
+        .btn-yes { background-color: #ff6b6b; color: white; }
+        .btn-yes:hover { background-color: #ff4757; transform: scale(1.05); }
+        .btn-no { background-color: #a0a0a0; color: white; position: relative; }
+        
+        /* Cài đặt ẩn các màn hình sau */
+        #screen2, #screen3 { display: none; }
+
+        /* Nút không chạy trốn ở màn 1 */
+        #btn-no-1 { position: absolute; right: 0; }
+        #btn-yes-1 { position: absolute; left: 0; }
+        .buttons-screen-1 { width: 300px; margin: 0 auto; position: relative; height: 60px; }
+
+        /* Bong bóng chat cho nút không ở màn 2 */
+        .tooltip-container {
+            position: relative;
+            display: inline-block;
+        }
+        .tooltip-text {
+            visibility: hidden;
+            width: max-content;
+            background-color: #ff4757;
+            color: #fff;
+            text-align: center;
+            border-radius: 10px;
+            padding: 10px 15px;
+            position: absolute;
+            z-index: 1;
+            bottom: 130%; /* Nổi lên trên nút */
+            left: 50%;
+            transform: translateX(-50%);
+            opacity: 0;
+            transition: opacity 0.3s;
+            font-size: 15px;
+            font-weight: normal;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+        }
+        /* Mũi tên của bong bóng chat */
+        .tooltip-text::after {
+            content: "";
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            margin-left: -8px;
+            border-width: 8px;
+            border-style: solid;
+            border-color: #ff4757 transparent transparent transparent;
+        }
+        .tooltip-container:hover .tooltip-text {
+            visibility: visible;
+            opacity: 1;
+        }
+
+        /* Khung ảnh màn 3 */
+        .image-container img {
+            max-width: 100%;
+            border-radius: 15px;
+            box-shadow: 0 5px 25px rgba(255, 107, 107, 0.3);
+            margin-top: 10px;
+            max-height: 350px;
+            object-fit: cover;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- MÀN HÌNH 1: Câu hỏi đầu tiên -->
+    <div id="screen1" class="container">
+        <h1>Anh yêu cún nhiều lắm, cún yêu cho anh xin lỗi nhé, Hòa Tùng Dương sai rồi 🥺</h1>
+        <div class="buttons-screen-1">
+            <button id="btn-yes-1" class="btn-yes">Đồng ý</button>
+            <button id="btn-no-1" class="btn-no">Không!</button>
+        </div>
+    </div>
+
+    <!-- MÀN HÌNH 2: Xác nhận lại -->
+    <div id="screen2" class="container">
+        <h1>Em bé tha lỗi cho anh thật chứ? ❤️</h1>
+        <div class="buttons">
+            <button id="btn-yes-2" class="btn-yes">Có ạ!</button>
+            <div class="tooltip-container">
+                <button id="btn-no-2" class="btn-no">Không nha</button>
+                <span class="tooltip-text">thui mà anh thực sự thấy sai rồi 🥺</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- MÀN HÌNH 3: Thành công & Hiện ảnh -->
+    <div id="screen3" class="container">
+        <h1>Anh cảm ơn Lê Hoàng vợ yêu đã tha lỗi cho anh ❤️</h1>
+        <div class="image-container">
+            <!-- Đổi tên ảnh của bạn thành anh.jpg và tải lên cùng thư mục -->
+            <img src="anh.jpg" alt="Ảnh của hai đứa">
+        </div>
+    </div>
+
+    <script>
+        const screen1 = document.getElementById('screen1');
+        const screen2 = document.getElementById('screen2');
+        const screen3 = document.getElementById('screen3');
+        
+        const btnNo1 = document.getElementById('btn-no-1');
+        const btnYes1 = document.getElementById('btn-yes-1');
+        const btnYes2 = document.getElementById('btn-yes-2');
+
+        // Logic Màn 1: Nút "Không" chạy trốn
+        btnNo1.addEventListener('mouseover', () => {
+            const maxX = window.innerWidth - btnNo1.offsetWidth;
+            const maxY = window.innerHeight - btnNo1.offsetHeight;
+            
+            const x = Math.random() * maxX;
+            const y = Math.random() * maxY;
+            
+            btnNo1.style.position = 'fixed';
+            btnNo1.style.left = x + 'px';
+            btnNo1.style.top = y + 'px';
+        });
+
+        // Logic Màn 1: Nhấn "Đồng ý" chuyển sang Màn 2
+        btnYes1.addEventListener('click', () => {
+            screen1.style.display = 'none';
+            screen2.style.display = 'block';
+        });
+
+        // Logic Màn 2: Nhấn "Có ạ" chuyển sang Màn 3
+        btnYes2.addEventListener('click', () => {
+            screen2.style.display = 'none';
+            screen3.style.display = 'block';
+            document.body.style.backgroundColor = '#ffeef0'; // Đổi nền màu hồng ngọt ngào hơn khi thành công
+        });
+    </script>
+</body>
+</html>
